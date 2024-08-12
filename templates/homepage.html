@@ -1,6 +1,16 @@
 {% extends "index.html" %}
 
 {% block content %}
+<div class="btn-group btn-group-toggle" data-toggle="buttons">
+    {% for elem in movie_lists %}
+
+    {% if current_list == elem.key %}
+        <a href="{{ url_for('homepage', list_type=elem.key) }}" class="btn btn-outline-info active" >{{elem.value}}</a>
+    {% else %}
+        <a href="{{ url_for('homepage', list_type=elem.key) }}" class="btn btn-outline-info" >{{elem.value}}</a>
+    {% endif %}
+    {% endfor %}
+</div>
 
 <div class="row">
    <div class="col-lg-12 text-center">
@@ -15,7 +25,7 @@
                <h4 class="card-title">{{ movie.title }}</h4>
            </div>
            <div class="card-footer text-center">
-               <a href="#" class="btn btn-primary">Pokaż więcej</a>
+               <a href="{{ url_for('movie_details', movie_id=movie.id) }}">Pokaż więcej</a>
            </div>
        </div>
    </div>
