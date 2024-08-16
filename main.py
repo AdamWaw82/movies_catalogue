@@ -1,12 +1,12 @@
-import json
-
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash
 
 from movies_catalogue import tmdb_client
 from movies_catalogue.tmdb_client import get_movies, get_single_movie, get_single_movie_cast, get_random_image, \
-    get_list, search_movie
+    get_list, search_movie, get_today
 
 app = Flask(__name__)
+app.secret_key = b'my-secret'
+FAVORITES = []
 
 
 @app.route('/')
@@ -30,8 +30,36 @@ def movie_details(movie_id):
 def search():
     search_query = request.args.get("q", "")
     movies = search_movie(search_query)['results']
-    print(movies)
     return render_template("search.html", movies=movies, search_query=search_query)
+
+
+@app.route("/today")
+def today():
+    import datetime
+    movies = get_today()['results']
+    curr_date = datetime.date.today()
+    return render_template("today.html", movies=movies, today=curr_date)
+
+
+@app.route("/favorites/add", methods=['POST'])
+def add_to_favorites():
+    data = request.form
+    movie_id = data.get('movie_id')
+    movie_title = data.get('movie_title')
+    if movie_id:
+        FAVORITES.append(movie_id)
+    flash(f'Dodano film {movie_title} do ulubionych!')
+    return redirect(url_for('homepage'))
+
+
+@app.route("/favorites", methods=['GET'])
+def show_favorites():
+    movies = []
+    for movie_id in FAVORITES:
+        movies.append(get_single_movie(movie_id))
+
+    return render_template("favorites.html", movies=movies)
+
 
 @app.context_processor
 def utility_processor():

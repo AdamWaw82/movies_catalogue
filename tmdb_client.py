@@ -90,6 +90,15 @@ def search_movie(search_query):
     }
 
     response = requests.get(endpoint, headers=headers)
-    print(response.json())
 
+    return response.json()
+
+
+def get_today():
+    endpoint = f"https://api.themoviedb.org/3/tv/airing_today"
+    headers = {
+        "Authorization": f"Bearer {API_TOKEN}"
+    }
+    response = requests.get(endpoint, headers=headers)
+    print(response.json())
     return response.json()

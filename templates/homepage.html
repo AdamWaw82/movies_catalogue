@@ -30,7 +30,13 @@
            </div>
            <div class="card-footer text-center">
                <a href="{{ url_for('movie_details', movie_id=movie.id) }}">Pokaż więcej</a>
+               <form method="POST" action="{{ url_for('add_to_favorites') }}" class="d-inline-flex">
+                <input type="hidden" name="movie_title" value="{{ movie.title }}">
+                <input type="hidden" name="movie_id" value="{{ movie.id }}">
+                   <button type='submit' class="btn fa-regular fa-heart"></button>
+              </form>
            </div>
+
        </div>
    </div>
    {% endfor %}
