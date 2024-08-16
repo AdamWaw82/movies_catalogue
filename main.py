@@ -3,7 +3,8 @@ import json
 from flask import Flask, render_template, request
 
 from movies_catalogue import tmdb_client
-from movies_catalogue.tmdb_client import get_movies, get_single_movie, get_single_movie_cast, get_random_image, get_list
+from movies_catalogue.tmdb_client import get_movies, get_single_movie, get_single_movie_cast, get_random_image, \
+    get_list, search_movie
 
 app = Flask(__name__)
 
@@ -24,6 +25,13 @@ def movie_details(movie_id):
     print(image)
     return render_template("movie_details.html", movie_image=image, movie=details, credits=d_credits["cast"])
 
+
+@app.route("/search")
+def search():
+    search_query = request.args.get("q", "")
+    movies = search_movie(search_query)['results']
+    print(movies)
+    return render_template("search.html", movies=movies, search_query=search_query)
 
 @app.context_processor
 def utility_processor():

@@ -81,3 +81,15 @@ def get_random_image(movie_id):
 
     random_image = random.sample(data_results, 1)[0]
     return random_image
+
+
+def search_movie(search_query):
+    endpoint = f"https://api.themoviedb.org/3/search/movie?query={search_query}"
+    headers = {
+        "Authorization": f"Bearer {API_TOKEN}"
+    }
+
+    response = requests.get(endpoint, headers=headers)
+    print(response.json())
+
+    return response.json()
