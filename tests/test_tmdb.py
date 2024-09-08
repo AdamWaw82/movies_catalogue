@@ -1,5 +1,7 @@
 from tmdb_client import get_movies_list, get_poster_url, get_single_movie, get_image_movie, get_single_movie_cast, call_tmdb_api
 from unittest.mock import Mock
+from main import app
+import pytest
 
 def test_get_movies_list(monkeypatch):
    mock_movies_list = ['Movie 1', 'Movie 2']
@@ -109,3 +111,21 @@ def test_movie_url(monkeypatch):
 
    monkeypatch.setattr("tmdb_client.requests.get", mock_get)
    call_tmdb_api(f"movie/{id}")
+
+
+@pytest.mark.parametrize("list_type", [
+    ("popular"),
+    ("top_rated"),
+    ("upcoming"),
+    ("now_playing")
+])
+
+
+def test_homepage(monkeypatch, list_type):
+   api_mock = Mock(return_value={'results': []})
+   monkeypatch.setattr("tmdb_client.call_tmdb_api", api_mock)
+
+   with app.test_client() as client:
+       response = client.get(f"/?list_type={list_type}")
+       assert response.status_code == 200
+       api_mock.assert_called_once_with(f"movie/{list_type}")

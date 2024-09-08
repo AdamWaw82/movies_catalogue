@@ -42,8 +42,7 @@ def get_movies(how_many, list_name='popular'):
     data = get_movies_list(list_name)
     data_results = data["results"]
 
-    shuffle_list = random.sample(data_results, how_many)
-    return shuffle_list
+    return data_results
 
 
 def get_single_movie(movie_id):
