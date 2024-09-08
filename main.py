@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 
-from movies_catalogue import tmdb_client
-from movies_catalogue.tmdb_client import get_movies, get_single_movie, get_single_movie_cast, get_random_image, \
+import tmdb_client
+from tmdb_client import get_movies, get_single_movie, get_single_movie_cast, get_random_image, \
     get_list, search_movie, get_today
 
 app = Flask(__name__)
